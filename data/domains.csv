@@ -1,6 +1,16 @@
-domain, num_articles
-bloomberg.com/canada, 
-cbc.ca, 
-globalnews.ca, 
-blogto.com, 
-theglobeandmail.com, 
+source_name,domain,visits
+CBC,cbc.ca,37800000
+CNN,cnn.com,23400000
+CTV News,ctvnews.ca,23140000
+BBC,bbc.com,22090000
+NY Times,nytimes.com,21750000
+Radio Canada,radio-canada.ca,14080000
+La Presse,lapresse.ca,12440000
+Global News,globalnews.ca,10440000
+The Guardian,theguardian.com,7990000
+Toronto Star,thestar.com,6320000
+City News,citynews.ca,5560000
+CP24,cp24.com,5230000
+Fox News,foxnews.com,4440000
+Daily Hive,dailyhive.com,3730000
+National Post,nationalpost.com,3540000
