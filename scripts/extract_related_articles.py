@@ -12,6 +12,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("political_figure", type=str, help="Name of the political figure to extract articles for.")
     parser.add_argument("-n", type = int, help="Number of articles to extract")
+    # take in domain id list
+
+    # extract articles, header and description line based on what number of it says, ten extra for each so we have room to reject
+    # for the request, sort by date latest to oldest
+    # add to csv store title, author, publication, date, description
+    
+
     args = parser.parse_args()
 
     n = args.n or 500
