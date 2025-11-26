@@ -8,9 +8,9 @@ import time
 import math
 
 BASE_URL = "https://api.thenewsapi.com/v1/news/all"
-DAILY_LIMIT = 3 # limit of requests each day
+DAILY_LIMIT = 100 # limit of requests each day
 PAGE_SIZE = 3 # how many articles each request returns
-TOKEN = "nb12MNLS0KwH5vgiFtOqjK5dPQlqHgBojFp8P6nN"
+TOKEN = "e5fKAULLHhLFNZJuUNszeRnTvdoDDBmnYcu53WcV"
 
 
 def create_search(searches):
@@ -36,10 +36,11 @@ def calculate_domains_today(in_path):
         if header is None:
             print("Input CSV is empty")
             return None, [], []
+        num_idx = header.index("num_articles")
         rows = list(reader)
         total_requests = 0
         for row in rows:
-            requests_needed = math.ceil(int(row[1])/PAGE_SIZE)
+            requests_needed = math.ceil(int(row[num_idx])/PAGE_SIZE)
             if total_requests + requests_needed <= DAILY_LIMIT:
                 total_requests = total_requests + requests_needed
                 rows_today.append(row)
@@ -69,7 +70,7 @@ def make_request(domain, page, search, sort):
     """
 
     if sort == "date":
-        sort_url = "published_on"
+        sort_url = "published_at"
     else:
         sort_url = "relevance_score"
 
@@ -168,11 +169,14 @@ def main():
     if header is None:
         return
     create_remaining(header, remaining)
+
+    domain_idx = header.index("domain")
+    num_idx = header.index("num_articles")
     
     # quering for the possible domains and saving those articles
     for row in domains_today:
-        domain = row[0]
-        num = int(row[1])
+        domain = row[domain_idx]
+        num = int(row[num_idx])
 
         page = 1
         saved_for_domain = 0
