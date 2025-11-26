@@ -1,0 +1,11 @@
+num,source_name,domain,visits,num_articles
+0,CBC,cbc.ca,37800000,155
+1,CTV News,ctvnews.ca,23140000,95
+2,NY Times,nytimes.com,21750000,89
+3,Global News,globalnews.ca,10440000,43
+4,Toronto Star,thestar.com,6320000,26
+5,City News,citynews.ca,5560000,23
+6,CP24,cp24.com,5230000,21
+7,Fox News,foxnews.com,4440000,18
+8,Daily Hive,dailyhive.com,3730000,15
+9,National Post,nationalpost.com,3540000,15
