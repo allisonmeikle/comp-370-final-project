@@ -1,74 +1,65 @@
-import requests
 from bs4 import BeautifulSoup
 import csv
-import time
+import argparse
+from pathlib import Path
 
-SEARCH_URL = "https://www.ctvnews.ca/search" 
-QUERY = "Carney"
-PAGES_TO_FETCH = 5 
+SEARCH_URL = "https://www.ctvnews.ca/search"
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; comp370-scraper/1.0; +https://example.com)"
-}
+def parse_ctv(html_path):
+    # html_path is a file path; read the HTML from disk
+    html_path = Path(html_path)
+    html = html_path.read_text(encoding="utf-8")
 
-def fetch_search_page(page: int) -> str:
-    params = {
-        "q": QUERY,
-        "page": page, 
-    }
-    resp = requests.get(SEARCH_URL, params=params, headers=HEADERS)
-    resp.raise_for_status()
-    return resp.text
-
-def parse_results(html: str):
     soup = BeautifulSoup(html, "html.parser")
-    results = []
+    rows = []
 
-    # This selector is generic; you’ll tweak it after inspecting the HTML.
-    # Start by grabbing all <a> tags that look like article links.
-    for a in soup.find_all("a", href=True):
-        href = a["href"]
-        title = a.get_text(strip=True)
+    # each result has title + description + date in the same block
+    for title_div in soup.select("div.queryly_item_title"):
+        parent = title_div.parent
 
-        if not title:
-            continue
+        title = title_div.get_text(strip=True)
 
-        # normalize relative URLs
-        if href.startswith("/"):
-            href = "https://www.ctvnews.ca" + href
+        desc_div = parent.select_one("div.queryly_item_description")
+        description = desc_div.get_text(strip=True) if desc_div else ""
 
-        # keep only CTV News article links
-        if "ctvnews.ca" not in href:
-            continue
+        # date is the next div after description (like "Nov 25, 2025")
+        date_div = desc_div.find_next_sibling("div") if desc_div else None
+        date = date_div.get_text(strip=True) if date_div else ""
 
-        results.append((title, href))
+        rows.append([title, description, "ctvnews.ca", date])
 
-    return results
+    return rows
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="fetch articles from ctv news web page"
+    )
+    parser.add_argument(
+        "-input", "-in",              # <-- accept both -input and -in
+        dest="input_path",
+        required=True,
+        help="Path to input html file",
+    )
+    parser.add_argument(
+        "-out",
+        dest="out_path",
+        required=True,
+        help="Path to output csv file",
+    )
+    return parser.parse_args()
 
 def main():
-    seen_urls = set()
-    all_articles = []
+    args = parse_args()
+    rows = parse_ctv(args.input_path)
 
-    for page in range(1, PAGES_TO_FETCH + 1):
-        html = fetch_search_page(page)
-        articles = parse_results(html)
-
-        if not articles:
-            break  # probably no more results
-
-        for title, url in articles:
-            if url in seen_urls:
-                continue
-            seen_urls.add(url)
-            all_articles.append((title, url))
-
-        time.sleep(1)  # be polite; don’t hammer their server
-
-    # Save to CSV
-    with open("ctv_carney_articles.csv", "w", newline="", encoding="utf-8") as f:
+    out_path = Path(args.out_path)
+    # append rows to out.csv (assumes header already exists)
+    with out_path.open("a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["title", "url"])
-        writer.writerows(all_articles)
+        for row in rows:
+            writer.writerow(row)
+
+    print(f"Found {len(rows)} CTV articles, appended to {out_path}")
 
 if __name__ == "__main__":
     main()

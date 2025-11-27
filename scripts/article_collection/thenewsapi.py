@@ -10,7 +10,7 @@ import math
 BASE_URL = "https://api.thenewsapi.com/v1/news/all"
 DAILY_LIMIT = 100 # limit of requests each day
 PAGE_SIZE = 3 # how many articles each request returns
-TOKEN = "e5fKAULLHhLFNZJuUNszeRnTvdoDDBmnYcu53WcV"
+TOKEN = "qV5RYBo45PuJppztC2SAbeTsNH6csNEdNslYOUYu"
 
 
 def create_search(searches):
