@@ -8,8 +8,11 @@ def main():
     args = parser.parse_args()
 
     df = pd.read_csv(args.data)
-    df_sample = df.sample(n=200)
-    df_sample.to_csv(os.path.join(os.path.dirname(__file__), "..", "data", "open_coding_articles.tsv"), sep="\t")
+    print(df.head())
+    
+    
+    #df_sample = df.sample(n=200)
+    #df_sample.to_csv(os.path.join(os.path.dirname(__file__), "..", "data", "open_coding_articles.tsv"), sep="\t")
 
 if __name__ == "__main__":
     main()
