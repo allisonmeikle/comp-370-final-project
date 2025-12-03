@@ -41,22 +41,13 @@ def clean_csv_spaces_and_empty_quotes(input_path, output_path):
 
 
 def main():
-    df1 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "open_coding_articles.tsv"), index_col=0, sep="\t")
-
-    '''
-    clean_csv_spaces_and_empty_quotes(
-        os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group1.csv"),
-        os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group1_cleaned.csv")
-    )
-    '''
-
-    df2 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group1_cleaned.csv"), index_col="index")
+    df1 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "open_coding_articles.tsv"), index_col=0, sep="\t")
+    df2 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group1.csv"), index_col="index")
     df3 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group2.csv"), index_col="index")
     df4 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group3.csv"), index_col="index")
-
     combined = pd.concat([df1, df2, df3, df4], ignore_index=False)
     combined = combined.sort_index()
-    combined.to_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "final_annotated_articles.tsv"), sep="\t")
+    combined.to_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "final_annotated_articles.tsv"), sep="\t", index=False)
 
 if __name__ == "__main__":
     main()
