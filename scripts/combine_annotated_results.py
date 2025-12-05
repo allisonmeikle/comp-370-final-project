@@ -46,6 +46,16 @@ def main():
     df3 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group2.csv"), index_col="index")
     df4 = pd.read_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "remaining_articles_group3.csv"), index_col="index")
     combined = pd.concat([df1, df2, df3, df4], ignore_index=False)
+
+    # Rename open_coding_topic labels
+    topic_map = {
+        "National": "National Politics",
+        "International": "International Politics",
+        "Election": "Elections"
+    }
+
+    combined["open_coding_topic"] = combined["open_coding_topic"].replace(topic_map)
+
     combined = combined.sort_index()
     combined.to_csv(os.path.join(SCRIPT_DIR, "..", "data", "articles", "final_annotated_articles.tsv"), sep="\t", index=False)
 
